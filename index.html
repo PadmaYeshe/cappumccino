@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>cappumccino</title>
+<meta name="theme-color" content="#241610">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="cappumccino">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --espresso:#241610; --panel:#2e1d15; --panel-2:#382417;
+    --foam:#f4e9d6; --foam-dim:#c6b199; --crema:#dd9f5f;
+    --coffee-a:#4a2c1c; --coffee-b:#2f1c11;
+    --ceramic:#ece0cc; --ceramic-shade:#d3c3a8;
+    --rose:#e08e9c; --sage:#93bfa0;
+    --line:rgba(244,233,214,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(120% 90% at 50% -10%, #33221a 0%, var(--espresso) 55%, #1c110c 100%);
+    color:var(--foam); font-family:"Hanken Grotesk",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100dvh;
+    display:flex; justify-content:center;
+    padding:22px 18px calc(22px + env(safe-area-inset-bottom));
+  }
+  .wrap{width:100%;max-width:430px;display:flex;flex-direction:column;gap:20px}
+
+  header{text-align:center;padding-top:4px;position:relative}
+  .lang{position:absolute;top:-2px;right:0;display:flex;gap:2px;
+    background:rgba(244,233,214,.05);border:1px solid var(--line);border-radius:999px;padding:3px}
+  .lang-btn{appearance:none;border:0;background:transparent;color:var(--foam-dim);
+    font-family:inherit;font-size:.72rem;font-weight:700;letter-spacing:.04em;
+    padding:4px 9px;border-radius:999px;cursor:pointer;transition:color .2s,background .2s}
+  .lang-btn.on{background:var(--crema);color:#2a1a0e}
+  .mark{font-family:"Fraunces",serif;font-weight:600;font-size:2.5rem;line-height:1;letter-spacing:-.01em}
+  .mark b{color:var(--crema);font-weight:600;font-style:italic}
+  .tag{margin-top:8px;font-size:.86rem;color:var(--foam-dim)}
+
+  .status{display:flex;align-items:center;justify-content:center;text-align:center;min-height:34px}
+  .who-pill{font-size:1.02rem;font-weight:600;padding:7px 16px;border-radius:999px;
+    border:1px solid var(--line);background:rgba(244,233,214,.04);
+    transition:color .3s,border-color .3s,background .3s}
+  .who-pill.p{color:var(--rose);border-color:rgba(224,142,156,.4);background:rgba(224,142,156,.08)}
+  .who-pill.a{color:var(--sage);border-color:rgba(147,191,160,.4);background:rgba(147,191,160,.08)}
+  .who-pill.even{color:var(--foam-dim)}
+
+  .cup-stage{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .cup{width:236px;height:236px;display:block}
+  .steam{opacity:0;transition:opacity .6s}
+  .steam path{fill:none;stroke:var(--foam);stroke-width:3.4;stroke-linecap:round;opacity:.34}
+  #liquid-group{transition:transform 1.05s cubic-bezier(.22,1,.36,1)}
+  .fill-label{font-family:"Fraunces",serif;font-style:italic;font-size:1.02rem;color:var(--foam-dim);text-align:center;min-height:1.4em}
+  .fill-label b{color:var(--foam);font-style:normal;font-weight:600}
+
+  .tallies{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .tally{background:linear-gradient(180deg,var(--panel) 0%,var(--panel-2) 100%);
+    border:1px solid var(--line);border-radius:18px;padding:16px 14px;text-align:center}
+  .tally .num{font-family:"Fraunces",serif;font-weight:700;font-size:2.5rem;line-height:1;color:var(--foam);font-variant-numeric:tabular-nums}
+  .tally .lbl{margin-top:6px;font-size:.82rem;color:var(--foam-dim)}
+  .tally.jantar .num{color:var(--crema)}
+
+  .adders{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .add{appearance:none;border:1.5px solid;border-radius:20px;padding:18px 12px 15px;cursor:pointer;
+    background:rgba(244,233,214,.03);color:var(--foam);font-family:inherit;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    transition:transform .12s,background .2s;-webkit-tap-highlight-color:transparent}
+  .add .name{font-family:"Fraunces",serif;font-weight:600;font-size:1.7rem;line-height:1}
+  .add .cta{font-size:.82rem;color:var(--foam-dim)}
+  .add.p{border-color:rgba(224,142,156,.55)} .add.a{border-color:rgba(147,191,160,.55)}
+  .add.p .name{color:var(--rose)} .add.a .name{color:var(--sage)}
+  .add.p:hover{background:rgba(224,142,156,.10)} .add.a:hover{background:rgba(147,191,160,.10)}
+  .add:active{transform:scale(.96)}
+  .add.pop{animation:pop .32s ease}
+  @keyframes pop{40%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+  .secondary{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .btn{appearance:none;font-family:inherit;cursor:pointer;border:1px solid var(--line);border-radius:12px;
+    background:transparent;color:var(--foam-dim);padding:9px 15px;font-size:.85rem;font-weight:500;
+    transition:color .2s,border-color .2s,background .2s,opacity .2s;-webkit-tap-highlight-color:transparent}
+  .btn:hover:not(:disabled){color:var(--foam);border-color:rgba(244,233,214,.28)}
+  .btn:disabled{opacity:.32;cursor:default}
+  .btn.feast{color:var(--crema);border-color:rgba(221,159,95,.45)}
+  .btn.feast:hover:not(:disabled){background:rgba(221,159,95,.10)}
+
+  details.log{border-top:1px solid var(--line);padding-top:14px}
+  details.log summary{list-style:none;cursor:pointer;color:var(--foam-dim);font-size:.82rem;
+    display:flex;justify-content:space-between;align-items:center}
+  details.log summary::-webkit-details-marker{display:none}
+  details.log summary .chev{transition:transform .2s}
+  details.log[open] summary .chev{transform:rotate(180deg)}
+  .log-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:210px;overflow:auto}
+  .log-row{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--foam-dim)}
+  .log-row .dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--foam-dim)}
+  .log-row.p .dot{background:var(--rose)} .log-row.a .dot{background:var(--sage)}
+  .log-row.feast .dot{background:var(--crema)}
+  .log-row .txt{flex:1;color:var(--foam)}
+  .log-row .t{font-variant-numeric:tabular-nums;font-size:.76rem}
+  .log-empty{font-size:.85rem;color:var(--foam-dim);font-style:italic}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);
+    background:var(--crema);color:#2a1a0e;font-weight:600;padding:13px 22px;border-radius:14px;
+    font-size:.98rem;box-shadow:0 12px 34px rgba(0,0,0,.4);
+    transition:transform .5s cubic-bezier(.2,1.2,.3,1);z-index:20;
+    display:flex;align-items:center;gap:9px;max-width:88vw}
+  .toast.show{transform:translate(-50%,0)}
+
+  footer{text-align:center;font-size:.74rem;color:rgba(198,177,153,.55);padding-top:2px}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition-duration:.01ms!important}
+    .steam{opacity:0!important}
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="lang" id="lang">
+        <button class="lang-btn" data-lang="pt">PT</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <div class="mark">cappu<b>m</b>ccino</div>
+      <div class="tag" id="tagLine"></div>
+    </header>
+
+    <div class="status" aria-live="polite">
+      <span id="whoPill" class="who-pill even"></span>
+    </div>
+
+    <div class="cup-stage">
+      <svg class="cup" viewBox="0 0 236 236" role="img" aria-labelledby="cupTitle">
+        <title id="cupTitle"></title>
+        <defs>
+          <linearGradient id="coffee" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--coffee-a)"/>
+            <stop offset="1" stop-color="var(--coffee-b)"/>
+          </linearGradient>
+          <clipPath id="cupClip"><path d="M70,82 H166 a6,6 0 0 1 6,6 V150 a30,30 0 0 1 -30,30 H94 a30,30 0 0 1 -30,-30 V88 a6,6 0 0 1 6,-6 Z"/></clipPath>
+        </defs>
+        <g class="steam" id="steam">
+          <path d="M100,52 q-9,-11 0,-22 q9,-11 0,-22"/>
+          <path d="M120,54 q-9,-11 0,-22 q9,-11 0,-22"/>
+          <path d="M140,52 q-9,-11 0,-22 q9,-11 0,-22"/>
+        </g>
+        <ellipse cx="118" cy="200" rx="82" ry="13" fill="var(--ceramic-shade)"/>
+        <ellipse cx="118" cy="196" rx="82" ry="13" fill="var(--ceramic)"/>
+        <path d="M170,102 C210,98 210,160 170,156" fill="none" stroke="var(--ceramic)" stroke-width="13" stroke-linecap="round"/>
+        <path d="M170,102 C210,98 210,160 170,156" fill="none" stroke="var(--ceramic-shade)" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+        <path d="M64,80 H172 a8,8 0 0 1 8,8 V150 a34,34 0 0 1 -34,34 H90 a34,34 0 0 1 -34,-34 V88 a8,8 0 0 1 8,-8 Z" fill="var(--ceramic)"/>
+        <g clip-path="url(#cupClip)">
+          <rect x="60" y="80" width="120" height="120" fill="var(--panel-2)"/>
+          <g id="liquid-group">
+            <rect x="60" y="86" width="120" height="140" fill="url(#coffee)"/>
+            <ellipse cx="118" cy="88" rx="60" ry="12" fill="var(--foam)"/>
+            <ellipse cx="118" cy="86" rx="60" ry="11" fill="#fbf3e4"/>
+            <circle cx="104" cy="86" r="3.2" fill="var(--crema)" opacity=".55"/>
+            <circle cx="128" cy="89" r="2.4" fill="var(--crema)" opacity=".45"/>
+            <circle cx="118" cy="84" r="2" fill="var(--coffee-b)" opacity=".3"/>
+          </g>
+        </g>
+        <path d="M64,80 H172 a8,8 0 0 1 8,8 v3 H56 v-3 a8,8 0 0 1 8,-8 Z" fill="var(--ceramic-shade)"/>
+        <rect class="rim-band" id="rimBand" x="56" y="80" width="124" height="4" rx="2" fill="var(--foam-dim)"/>
+      </svg>
+      <div class="fill-label" id="fillLabel">&nbsp;</div>
+    </div>
+
+    <div class="tallies">
+      <div class="tally">
+        <div class="num" id="cupCount">0</div>
+        <div class="lbl" id="tally1Lbl"></div>
+      </div>
+      <div class="tally jantar">
+        <div class="num" id="feastCount">0</div>
+        <div class="lbl" id="feastLbl"></div>
+      </div>
+    </div>
+
+    <div class="adders">
+      <button class="add p" id="addP"><span class="name">P</span><span class="cta" id="ctaP"></span></button>
+      <button class="add a" id="addA"><span class="name">A</span><span class="cta" id="ctaA"></span></button>
+    </div>
+
+    <div class="secondary">
+      <button class="btn feast" id="settle" disabled></button>
+      <button class="btn" id="undo" disabled></button>
+      <button class="btn" id="reset"></button>
+    </div>
+
+    <details class="log">
+      <summary><span id="sumLabel"></span><span class="chev">&#9662;</span></summary>
+      <div class="log-list" id="logList"></div>
+    </details>
+
+    <footer id="footNote"></footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="cappumccino:v1", PER_FEAST=8;
+  var $=function(id){return document.getElementById(id);};
+
+  var STR={
+    en:{
+      loc:"en-GB",
+      tag:"P & A's little cappuccino ledger",
+      loading:"loading\u2026",
+      pillP:"P owes A cappuccinos", pillA:"A owes P cappuccinos", pillEven:"All square \u2615",
+      cupAria:"Cup filling toward the next dinner",
+      fillNone:"no debt right now",
+      fillFull:"cup's full: <b>dinner!</b>",
+      fillLeft:function(n){return "<b>"+n+"</b> to go till the next dinner";},
+      tally1:"cappuccinos owed",
+      feastLbl:function(n){return n===1?"dinner to settle":"dinners to settle";},
+      cta:"owes +1",
+      settle:"settle a dinner", undo:"undo last", reset:"clear all",
+      history:"History", logEmpty:"No entries yet.",
+      logP:"P owes one more cappuccino", logA:"A owes one more cappuccino",
+      feastPA:"Dinner settled (P \u2192 A)", feastAP:"Dinner settled (A \u2192 P)",
+      foot:"Saved on this device. Every 8 cappuccinos = 1 dinner.",
+      toast:function(b){return b>0?"A gets dinner on P!":"P gets dinner on A!";},
+      confirm:"Clear everything? This erases the count and the history."
+    },
+    pt:{
+      loc:"pt-BR",
+      tag:"o caderninho dos cappuccinos da P & do A",
+      loading:"carregando\u2026",
+      pillP:"P deve cappuccinos a A", pillA:"A deve cappuccinos a P", pillEven:"Est\u00e3o quites \u2615",
+      cupAria:"X\u00edcara enchendo at\u00e9 o pr\u00f3ximo jantar",
+      fillNone:"nenhuma d\u00edvida por enquanto",
+      fillFull:"x\u00edcara cheia: <b>jantar!</b>",
+      fillLeft:function(n){return "faltam <b>"+n+"</b> para o pr\u00f3ximo jantar";},
+      tally1:"cappuccinos em d\u00edvida",
+      feastLbl:function(n){return n===1?"jantar a saldar":"jantares a saldar";},
+      cta:"ficou devendo +1",
+      settle:"saldar um jantar", undo:"anular \u00faltimo", reset:"zerar tudo",
+      history:"Hist\u00f3rico", logEmpty:"Ainda sem lan\u00e7amentos.",
+      logP:"P ficou devendo um cappuccino", logA:"A ficou devendo um cappuccino",
+      feastPA:"Jantar saldado (P \u2192 A)", feastAP:"Jantar saldado (A \u2192 P)",
+      foot:"Guardado neste dispositivo. Cada 8 cappuccinos = 1 jantar.",
+      toast:function(b){return b>0?"A vai jantar \u00e0 conta da P!":"P vai jantar \u00e0 conta do A!";},
+      confirm:"Zerar tudo? Isso apaga a contagem e o hist\u00f3rico."
+    }
+  };
+
+  var state={balance:0, log:[], lang:"en"};
+  var mem=null, prevFeasts=null, toastTimer;
+
+  async function load(){
+    try{ if(window.storage){ var r=await window.storage.get(KEY); if(r&&r.value) return JSON.parse(r.value);} }catch(e){}
+    try{ var s=localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){}
+    return mem;
+  }
+  async function save(){
+    var snap={balance:state.balance, log:state.log.slice(-60), lang:state.lang};
+    mem=snap; var str=JSON.stringify(snap);
+    try{ if(window.storage) await window.storage.set(KEY,str); }catch(e){}
+    try{ localStorage.setItem(KEY,str); }catch(e){}
+  }
+
+  function apply(who,delta){ state.balance+=delta; state.log.push({who:who,delta:delta,t:Date.now()}); save(); render(); }
+  function bump(el){ el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+
+  function fmtTime(t){ var d=new Date(t), loc=STR[state.lang].loc;
+    return d.toLocaleDateString(loc,{day:"2-digit",month:"2-digit"})+" "+
+           d.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"}); }
+
+  function toast(msg){ var t=$("toast"); t.textContent="\uD83C\uDF7D  "+msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove("show");},2600); }
+
+  var FILL_RANGE=118;
+  function render(){
+    var t=STR[state.lang], b=state.balance, mag=Math.abs(b);
+    var feasts=Math.floor(mag/PER_FEAST), rem=mag%PER_FEAST;
+    var level = mag===0 ? 0 : (rem===0 ? 1 : rem/PER_FEAST);
+
+    // static chrome
+    $("tagLine").textContent=t.tag;
+    $("cupTitle").textContent=t.cupAria;
+    $("tally1Lbl").textContent=t.tally1;
+    $("ctaP").textContent=t.cta; $("ctaA").textContent=t.cta;
+    $("settle").textContent=t.settle; $("undo").textContent=t.undo; $("reset").textContent=t.reset;
+    $("sumLabel").textContent=t.history; $("footNote").textContent=t.foot;
+    var lb=document.querySelectorAll(".lang-btn");
+    for(var i=0;i<lb.length;i++){ lb[i].classList.toggle("on", lb[i].getAttribute("data-lang")===state.lang); }
+
+    var pill=$("whoPill"); pill.classList.remove("p","a","even");
+    if(b>0){ pill.textContent=t.pillP; pill.classList.add("p"); }
+    else if(b<0){ pill.textContent=t.pillA; pill.classList.add("a"); }
+    else { pill.textContent=t.pillEven; pill.classList.add("even"); }
+
+    $("rimBand").setAttribute("fill", b>0?"var(--rose)": b<0?"var(--sage)":"var(--foam-dim)");
+    $("liquid-group").setAttribute("transform","translate(0,"+((1-level)*FILL_RANGE).toFixed(1)+")");
+    $("steam").style.opacity = level>=.75 ? "1" : "0";
+
+    $("cupCount").textContent=mag;
+    $("feastCount").textContent=feasts;
+    $("feastLbl").textContent=t.feastLbl(feasts);
+
+    var fl=$("fillLabel");
+    if(mag===0) fl.innerHTML=t.fillNone;
+    else if(rem===0) fl.innerHTML=t.fillFull;
+    else fl.innerHTML=t.fillLeft(PER_FEAST-rem);
+
+    $("settle").disabled=feasts<1;
+    $("undo").disabled=state.log.length===0;
+
+    renderLog(t);
+
+    if(prevFeasts!==null && feasts>prevFeasts) toast(t.toast(b));
+    prevFeasts=feasts;
+  }
+
+  function renderLog(t){
+    var list=$("logList");
+    if(state.log.length===0){ list.innerHTML='<div class="log-empty">'+t.logEmpty+'</div>'; return; }
+    var out=[], src=state.log.slice().reverse().slice(0,40);
+    for(var i=0;i<src.length;i++){
+      var e=src[i], cls, txt;
+      if(e.who==="jantar"){ cls="feast"; txt = e.delta<0 ? t.feastPA : t.feastAP; }
+      else if(e.who==="P"){ cls="p"; txt=t.logP; }
+      else { cls="a"; txt=t.logA; }
+      out.push('<div class="log-row '+cls+'"><span class="dot"></span><span class="txt">'+txt+
+               '</span><span class="t">'+fmtTime(e.t)+'</span></div>');
+    }
+    list.innerHTML=out.join("");
+  }
+
+  $("addP").addEventListener("click",function(){ apply("P",+1); bump($("addP")); });
+  $("addA").addEventListener("click",function(){ apply("A",-1); bump($("addA")); });
+  $("settle").addEventListener("click",function(){
+    var b=state.balance; if(Math.abs(b)<PER_FEAST) return;
+    apply("jantar", b>0? -PER_FEAST : +PER_FEAST);
+  });
+  $("undo").addEventListener("click",function(){
+    var last=state.log.pop(); if(!last) return; state.balance-=last.delta; save(); render();
+  });
+  $("reset").addEventListener("click",function(){
+    if(!confirm(STR[state.lang].confirm)) return; state.balance=0; state.log=[]; save(); render();
+  });
+  var langEl=$("lang");
+  langEl.addEventListener("click",function(ev){
+    var b=ev.target.closest(".lang-btn"); if(!b) return;
+    state.lang=b.getAttribute("data-lang"); save(); render();
+  });
+
+  (async function(){
+    var saved=await load();
+    if(saved && typeof saved.balance==="number"){
+      state.balance=saved.balance;
+      state.log=Array.isArray(saved.log)?saved.log:[];
+      if(saved.lang==="pt"||saved.lang==="en") state.lang=saved.lang;
+    }
+    prevFeasts=Math.floor(Math.abs(state.balance)/PER_FEAST);
+    render();
+  })();
+})();
+</script>
+</body>
+</html>
