@@ -1587,7 +1587,7 @@ cats:["Family, property and life","Intentions and aims","Friends and wealth","En
 firmQ:"How firm is the answer?",firmTx:"Cast twice more. The same pair again means very firm; the pair reversed means weak; any other pair leaves the answer as it stands.",
 firmBtn:"Cast twice more",firmSame:"The same pair: the answer is very firm.",firmRev:"The pair reversed: the answer is weak.",firmOther:"A different pair: the answer stands as it is.",
 journal:"Journal",jEmpty:"Your readings will be listed here. They are kept on this device only.",jClear:"Clear the journal",jConfirm:"Tap again to erase every reading",
-footer:"The readings in this app are written for it: the oracle phrases of the I Ching are rendered afresh from the Chinese, and each Mo answer is a condensed account of Mipham's text. The page references point to the full text in your two PDF files: <i>The I Ching or Book of Changes</i> (Wilhelm/Baynes) and <i>Mo: Tibetan Divination System</i> (Mipham; translated by Goldberg and Dakpa).",
+footer:"The readings in this app are written for it: the oracle phrases of the I Ching are rendered afresh from the Chinese, and each Mo answer is a condensed account of Mipham's text. The page references point to the full text in your two PDF files: <i>The I Ching or Book of Changes</i> (Wilhelm/Baynes) and <i>Mo: Tibetan Divination System</i> (Mipham; translated by Goldberg and Dakpa).<br>Version 5.",
 locale:"en-GB"},
 pt:{
 intro:"Lance o dado de Mañjuśrī ou jogue as três moedas. A leitura completa aparece logo abaixo: o Julgamento, a Imagem e as linhas do I Ching; o sinal, as onze áreas da vida e os apoios do Mo.",
@@ -1625,7 +1625,7 @@ cats:["Família, bens e vida","Intenções e objetivos","Amigos e riqueza","Inim
 firmQ:"Quão firme é a resposta?",firmTx:"Lance mais duas vezes. O mesmo par de novo significa muito firme; o par invertido significa fraca; qualquer outro par deixa a resposta como está.",
 firmBtn:"Lançar mais duas vezes",firmSame:"O mesmo par: a resposta é muito firme.",firmRev:"O par invertido: a resposta é fraca.",firmOther:"Um par diferente: a resposta permanece como está.",
 journal:"Diário",jEmpty:"Suas leituras aparecerão aqui. Ficam guardadas apenas neste aparelho.",jClear:"Apagar o diário",jConfirm:"Toque de novo para apagar todas as leituras",
-footer:"As leituras deste aplicativo foram escritas para ele: as frases oraculares do I Ching foram vertidas de novo a partir do chinês, e cada resposta do Mo é um relato condensado do texto de Mipham. As referências de página remetem ao texto completo nos seus dois PDFs: <i>The I Ching or Book of Changes</i> (Wilhelm/Baynes) e <i>Mo: Tibetan Divination System</i> (Mipham; tradução de Goldberg e Dakpa).",
+footer:"As leituras deste aplicativo foram escritas para ele: as frases oraculares do I Ching foram vertidas de novo a partir do chinês, e cada resposta do Mo é um relato condensado do texto de Mipham. As referências de página remetem ao texto completo nos seus dois PDFs: <i>The I Ching or Book of Changes</i> (Wilhelm/Baynes) e <i>Mo: Tibetan Divination System</i> (Mipham; tradução de Goldberg e Dakpa).<br>Versão 5.",
 locale:"pt-BR"}
 };
 var LANG="pt",LANGKEY="mo-iching-lang";
@@ -1991,6 +1991,6 @@ if(hot&&hot.ready){hot.ready(start)}else{start((hot&&hot.data)||{})}
 })();
 </script>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){r.update()}).catch(function(){})})}</script>
 </body>
 </html>
